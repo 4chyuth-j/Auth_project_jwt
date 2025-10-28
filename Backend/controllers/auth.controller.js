@@ -1,6 +1,7 @@
 import {User} from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import { generateVerificationCode } from "../utils/generateVerificationCode.js";
+import {generateTokenAndSetCookie} from "../utils/generateTokenAndSetCookie.js";
 
 export const signup = async(req,res)=>{
     const {email,password,name} = req.body
@@ -36,7 +37,7 @@ export const signup = async(req,res)=>{
             success:true,
             message:"User created Successfully!",
             user:{
-                ...savedUser,
+                ...savedUser._doc,
                 password: undefined,
             },
         });
