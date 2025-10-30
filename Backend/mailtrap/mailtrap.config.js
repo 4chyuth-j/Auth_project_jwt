@@ -5,29 +5,31 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const TOKEN = process.env.MAILTRAP_TOKEN;
 
-const transport = Nodemailer.createTransport(
+
+export const transport = Nodemailer.createTransport(
   MailtrapTransport({
-    token: TOKEN,
+    token: process.env.MAILTRAP_TOKEN,
   })
 );
 
-const sender = {
+export const sender = {
   address: "hello@demomailtrap.co",
-  name: "Mailtrap Test",
+  name: "Achyuth J.",
 };
 
 // const recipients = [
 //   "pookiepoo963@gmail.com",
 // ];
 
-transport
-  .sendMail({
-    from: sender,
-    to: recipients,
-    subject: "You are awesome!",
-    text: "Congrats for sending test email with Mailtrap!",
-    category: "Integration Test",
-  })
-  .then(console.log, console.error);
+
+// this should be done while importing and using the below code (the recipients should be array of emails like in above).
+// transport
+//   .sendMail({
+//     from: sender,
+//     to: recipients,
+//     subject: "You are awesome!",
+//     text: "Congrats for sending test email with Mailtrap!",
+//     category: "Integration Test",
+//   })
+//   .then(console.log, console.error);
