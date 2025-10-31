@@ -93,3 +93,46 @@ export const PASSWORD_RESET_REQUEST_TEMPLATE = `
 </body>
 </html>
 `;
+
+
+export const WELCOME_EMAIL_TEMPLATE = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Auth Company</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <div style="background: linear-gradient(to right, #4CAF50, #45a049); padding: 20px; text-align: center;">
+    <h1 style="color: white; margin: 0;">Welcome to Auth Company! 🎉</h1>
+  </div>
+  <div style="background-color: #f9f9f9; padding: 20px; border-radius: 0 0 5px 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+    <p>Hello {name},</p>
+    <p>Welcome aboard! We're thrilled to have you join our community. Your account has been successfully verified and you're all set to explore everything we have to offer.</p>
+    
+    <div style="background-color: white; padding: 20px; border-radius: 5px; margin: 20px 0;">
+      <h2 style="color: #4CAF50; margin-top: 0;">What's Next?</h2>
+      <ul style="line-height: 2;">
+        <li><strong>🔐 Secure Authentication:</strong> Your account is protected with industry-standard security measures</li>
+        <li><strong>📊 Dashboard Access:</strong> Manage your profile and preferences from your personalized dashboard</li>
+        <li><strong>🚀 Fast & Reliable:</strong> Experience seamless performance across all devices</li>
+        <li><strong>💬 24/7 Support:</strong> Our support team is always here to help you</li>
+        <li><strong>🔔 Real-time Notifications:</strong> Stay updated with instant alerts and updates</li>
+      </ul>
+    </div>
+
+    <div style="text-align: center; margin: 30px 0;">
+      <a href="#" style="background: linear-gradient(to right, #4CAF50, #45a049); color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">Get Started</a>
+    </div>
+
+    <p>If you have any questions or need assistance, don't hesitate to reach out to us. We're here to make your experience amazing!</p>
+    
+    <p>Best regards,<br>The Auth Company Team</p>
+  </div>
+  <div style="text-align: center; margin-top: 20px; color: #888; font-size: 0.8em;">
+    <p>This is an automated message, please do not reply to this email.</p>
+  </div>
+</body>
+</html>
+`;
