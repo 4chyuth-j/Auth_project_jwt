@@ -9,7 +9,7 @@ export const sendVerficationEmail = async (email, verificationToken) => {
         const response = await transport.sendMail({
             from: sender,
             to: recipient,
-            subject: "Email verification.",
+            subject: "Email verification",
             html: VERIFICATION_EMAIL_TEMPLATE.replace("{verificationCode}", verificationToken),
             category: "Email Verification",
         });
@@ -30,7 +30,7 @@ export const sendWelcomeEmail = async (email, name) => {
             .sendMail({
                 from: sender,
                 to: recipient,
-                subject: "Email verification",
+                subject: "Welcome to Auth Company!",
                 html: WELCOME_EMAIL_TEMPLATE.replace("{name}",name),
                 category:"Welcome Email",
             });
