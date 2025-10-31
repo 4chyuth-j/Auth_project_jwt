@@ -1,8 +1,10 @@
-import {User} from "../models/user.model.js";
 import bcrypt from "bcryptjs";
+import crypto from 'crypto';
+
+import {User} from "../models/user.model.js";
 import { generateVerificationCode } from "../utils/generateVerificationCode.js";
 import {generateTokenAndSetCookie} from "../utils/generateTokenAndSetCookie.js";
-import { sendVerficationEmail, sendWelcomeEmail } from "../mailtrap/email.js";
+import { sendPasswordResetEmail, sendVerficationEmail, sendWelcomeEmail } from "../brevo/email.js";
 
 export const signup = async(req,res)=>{
     const {email,password,name} = req.body
@@ -121,6 +123,35 @@ export const logout = async(req,res)=>{
         res.status(200).json({success: true, message:"Logged out Successfully."});
     } catch (error) {
         console.log("Error in logout controller:",error);
+        res.status(400).json({success:false, message:error.message});
+    }
+}
+
+export const forgotPassword = async (req,res) => {
+    const {email} = req.body;
+    try {
+        const user = await User.findOne({email});
+        if(!user){
+            return res.status(400).json({success:false, message:"Invalid User"});
+        }
+
+        //generate reset token
+        const resetToken = crypto.randomBytes(20).toString("hex");
+        const resetTokenExpiresAt = Date.now() + 1*60*60*1000; //1 hour from now
+
+        user.resetPasswordToken = resetToken;
+        user.resetPasswordExpiresAt = resetTokenExpiresAt;
+
+        await user.save();
+
+        const resetURL = `${process.env.CLIENT_URL}/reset-password/${resetToken}`
+
+        await sendPasswordResetEmail(user.email, resetURL);
+        
+        res.status(200).json({success:true, message:"Password reset link sent to your email"})
+
+    } catch (error) {
+        console.log("Error in password reset controller:",error);
         res.status(400).json({success:false, message:error.message});
     }
 }
