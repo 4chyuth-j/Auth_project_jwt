@@ -1,12 +1,12 @@
 
-import { PASSWORD_RESET_REQUEST_TEMPLATE, VERIFICATION_EMAIL_TEMPLATE, WELCOME_EMAIL_TEMPLATE } from "./emailTemplates.js";
+import { PASSWORD_RESET_REQUEST_TEMPLATE, PASSWORD_RESET_SUCCESS_TEMPLATE, VERIFICATION_EMAIL_TEMPLATE, WELCOME_EMAIL_TEMPLATE } from "./emailTemplates.js";
 import { transport, sender } from "./brevo.config.js"
 
 export const sendVerficationEmail = async (email, verificationToken) => {
     const recipient = [email]
 
     try {
-        const response = transport.sendMail({
+        const response =await transport.sendMail({
             from: sender,
             to: recipient,
             subject: "Email verification",
@@ -26,7 +26,7 @@ export const sendWelcomeEmail = async (email, name) => {
     const recipient = [email];
     try {
 
-        const response = transport
+        const response =await transport
             .sendMail({
                 from: sender,
                 to: recipient,
@@ -48,7 +48,7 @@ export const sendWelcomeEmail = async (email, name) => {
 export const sendPasswordResetEmail = async (email,resetURL) => {
     const recipient = [email];
     try {
-        const response = transport.sendMail({
+        const response =await transport.sendMail({
             from:sender,
             to:recipient,
             subject:"Reset your password",
@@ -59,5 +59,22 @@ export const sendPasswordResetEmail = async (email,resetURL) => {
     } catch (error) {
         console.error("Error sending password reset email", error);
         throw new Error(`Error sending password reset email:${error}`);
+    }
+}
+
+export const sendResetPasswordSuccessEmail = async (email) => {
+    const recipient = [email];
+    try {
+        const response =await transport.sendMail({
+            from:sender,
+            to:recipient,
+            subject:"Successfully Reseted password",
+            html:PASSWORD_RESET_SUCCESS_TEMPLATE,
+        });
+
+        console.log("success reset password Email sent successfully", response);
+    } catch (error) {
+        console.error("Error sending success password reset email", error);
+        throw new Error(`Error sending success password reset email:${error}`);
     }
 }

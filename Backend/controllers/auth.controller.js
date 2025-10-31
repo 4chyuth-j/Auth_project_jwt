@@ -4,7 +4,7 @@ import crypto from 'crypto';
 import {User} from "../models/user.model.js";
 import { generateVerificationCode } from "../utils/generateVerificationCode.js";
 import {generateTokenAndSetCookie} from "../utils/generateTokenAndSetCookie.js";
-import { sendPasswordResetEmail, sendVerficationEmail, sendWelcomeEmail } from "../brevo/email.js";
+import { sendPasswordResetEmail, sendVerficationEmail, sendWelcomeEmail, sendResetPasswordSuccessEmail } from "../brevo/email.js";
 
 export const signup = async(req,res)=>{
     const {email,password,name} = req.body
@@ -152,6 +152,60 @@ export const forgotPassword = async (req,res) => {
 
     } catch (error) {
         console.log("Error in password reset controller:",error);
+        res.status(400).json({success:false, message:error.message});
+    }
+}
+
+export const resetPassword = async (req,res) => {
+    try {
+        const token = req.params.token;
+        const {password} = req.body;
+
+        const user = await User.findOne({resetPasswordToken:token, resetPasswordExpiresAt:{$gt: Date.now()}})
+
+        if(!user){
+            return res.status(400).json({success:false,message:"Invalid or expired reset token"});
+        }
+
+        // updating password
+        const hashedPassword = await bcrypt.hash(password,10);
+        user.password = hashedPassword;
+
+        //removing the token
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpiresAt = undefined;
+
+        // saving the changes
+        await user.save();
+
+        await sendResetPasswordSuccessEmail(user.email);
+
+        res.status(200).json({
+            success:true,
+            message:"Password Reset Successfully"
+        });
+    } catch (error) {
+        console.log("Error in password reset success controller:",error);
+        res.status(400).json({success:false, message:error.message});
+    }
+}
+
+export const checkAuth = async (req,res) => {
+    try {
+        const user = await User.findById(req.userId);
+        if(!user){
+            return res.status(400).json({success:false, message:"User not found"});
+        }
+        res.status(200).json({
+            success:true,
+            user:{
+                ...user._doc,
+                password:undefined,
+            }
+        });
+
+    } catch (error) {
+        console.log("Error in check auth controller:",error);
         res.status(400).json({success:false, message:error.message});
     }
 }
