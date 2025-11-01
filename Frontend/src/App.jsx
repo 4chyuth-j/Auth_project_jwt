@@ -1,4 +1,7 @@
 import FloatingShape from "./components/FloatingShape";
+import { Route, Routes } from 'react-router-dom'
+import SignupPage from "./pages/SignupPage";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
@@ -24,6 +27,13 @@ function App() {
         left='-10%'
         delay={2}
       />
+
+      <Routes>
+        <Route path="/" element={"Home"} />
+        <Route path='/signup' element={<SignupPage/>} />
+        <Route path='/login' element={<LoginPage/>} />
+        {/* <Route path='/signup' element={<SignupPage/>} /> */}
+      </Routes>
     </div>
   )
 }
